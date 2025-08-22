@@ -25,7 +25,7 @@ public class ApiResponse<T> {
         return ResponseEntity.status(status.getStatusCode()).body(response);
     }
 
-    public static ResponseEntity<ApiResponse<Void>> successOnly(SuccessStatus status) {
+    public static ResponseEntity<ApiResponse<Void>> successOnly(SuccessStatus status) { //데이터 삭제와 같이 응답 데이터가 없는 성공
         ApiResponse<Void> response = ApiResponse.<Void>builder()
                 .status(status.getStatusCode())
                 .success(true)
