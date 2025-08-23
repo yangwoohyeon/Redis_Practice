@@ -13,6 +13,7 @@ public enum SuccessStatus {
     /**
      * 200 OK
      */
+    SIGNUP_SUCCESS(HttpStatus.OK,"회원가입 성공"),
     LOGIN_SUCCESS(HttpStatus.OK,"로그인 성공"),
     LOGOUT_SUCCESS(HttpStatus.OK,"로그아웃 성공"),
 

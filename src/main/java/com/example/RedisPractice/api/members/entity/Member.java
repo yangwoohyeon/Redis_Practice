@@ -20,7 +20,7 @@ public class Member extends BaseTimeEntity {
     @Email
     private String email;
 
-    @Column(name = "password", nullable = false, unique = true, length = 20)
+    @Column(name = "password", nullable = false, unique = true, length = 100)
     private String password;
 
     @Column(name = "nickname", nullable = false, unique = true, length = 15)

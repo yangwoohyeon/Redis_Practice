@@ -43,8 +43,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/",                                    // 인덱스
-                                "/login",                               // 로그인 폼
-                                "/signup",                              // 회원가입
+                                "/api/member/**",                          // 로그인, 회원가입
                                 "/css/**", "/js/**", "/images/**",  // 정적 리소스
                                 "/favicon.ico",                         // 파비콘
                                 "/error"                                // 에러 페이지
