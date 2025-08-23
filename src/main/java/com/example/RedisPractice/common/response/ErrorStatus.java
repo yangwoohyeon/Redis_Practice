@@ -11,6 +11,9 @@ public enum ErrorStatus {
     /**
      * 400 BAD_REQUEST (요청값 문제)
      */
+    BAD_REQUEST_DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST,"이미 가입된 사용자의 이메일 입니다."),
+    BAD_REQUEST_DUPLICATE_NICKNAME(HttpStatus.BAD_REQUEST,"사용중인 닉네임 입니다."),
+
 
     /**
      * 401 UNAUTHORIZED (인증되지 않은 사용자의 요청)

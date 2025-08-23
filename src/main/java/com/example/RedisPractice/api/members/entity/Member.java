@@ -3,14 +3,12 @@ package com.example.RedisPractice.api.members.entity;
 import com.example.RedisPractice.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @AllArgsConstructor
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
 
@@ -26,6 +24,5 @@ public class Member extends BaseTimeEntity {
     private String password;
 
     @Column(name = "nickname", nullable = false, unique = true, length = 15)
-    private String name;
-
+    private String nickname;
 }
