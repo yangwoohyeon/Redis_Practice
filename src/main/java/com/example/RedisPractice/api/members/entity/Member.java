@@ -25,4 +25,11 @@ public class Member extends BaseTimeEntity {
 
     @Column(name = "nickname", nullable = false, unique = true, length = 15)
     private String nickname;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public void setRole(Role role){
+        this.role = role;
+    }
 }

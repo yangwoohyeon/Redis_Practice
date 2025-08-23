@@ -18,6 +18,7 @@ public enum ErrorStatus {
     /**
      * 401 UNAUTHORIZED (인증되지 않은 사용자의 요청)
      */
+    UNAUTHORIZED_EMAIL_OR_PASSWORD(HttpStatus.UNAUTHORIZED,"유효하지 않은 이메일, 비밀번호입니다."),
     UNAUTHORIZED_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
     UNAUTHORIZED_INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
     UNAUTHORIZED_UNSUPPORTED_TOKEN(HttpStatus.UNAUTHORIZED, "지원되지 않는 토큰입니다."),

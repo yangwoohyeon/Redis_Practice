@@ -1,5 +1,6 @@
 package com.example.RedisPractice.api.members.jwt;
 
+import com.example.RedisPractice.api.members.entity.Role;
 import com.example.RedisPractice.common.exception.UnauthorizedException;
 import com.example.RedisPractice.common.response.ErrorStatus;
 import io.jsonwebtoken.*;
@@ -8,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.management.relation.Role;
+
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
