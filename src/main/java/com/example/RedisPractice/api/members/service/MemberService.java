@@ -4,7 +4,9 @@ import com.example.RedisPractice.api.members.dto.LoginRequestDto;
 import com.example.RedisPractice.api.members.dto.SignupRequestDto;
 import com.example.RedisPractice.api.members.entity.Member;
 import com.example.RedisPractice.api.members.jwt.JwtTokenProvider;
+import com.example.RedisPractice.api.members.jwt.RefreshToken;
 import com.example.RedisPractice.api.members.repository.MemberRepository;
+import com.example.RedisPractice.api.members.repository.TokenRepository;
 import com.example.RedisPractice.common.exception.BaseException;
 import com.example.RedisPractice.common.exception.UnauthorizedException;
 import com.example.RedisPractice.common.response.ErrorStatus;
@@ -25,6 +27,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -54,11 +57,38 @@ public class MemberService {
         }
 
         String token = jwtTokenProvider.generateToken(member.getEmail(),member.getRole());
+        String refreshToken = jwtTokenProvider.generateRefreshToken(member.getEmail());
+
+        // 리프레시 토큰 저장
+        jwtTokenProvider.saveRefreshToken(member.getId(), refreshToken, 7 * 24 * 60 * 60L); // 7일 만료
 
         Map<String, Object> response = new HashMap<>();
         response.put("token",token);
+        response.put("refreshToken", refreshToken);
         response.put("role",member.getRole());
 
         return response;
     }
+
+    public String reissueAccessToken(String refreshToken){
+        if(!jwtTokenProvider.validateToken(refreshToken)){
+            throw new BaseException(ErrorStatus.UNAUTHORIZED_REFRESH_TOKEN_EXPIRED.getHttpStatus(),ErrorStatus.UNAUTHORIZED_EMPTY_TOKEN.getMessage());
+        }
+
+        String email = jwtTokenProvider.getEmail(refreshToken);
+
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(()->new UnauthorizedException("회원 정보를 찾을 수 없습니다."));
+
+        RefreshToken storedRefreshToken = tokenRepository.findById(member.getId())
+                .orElseThrow(()-> new UnauthorizedException("리프레시 토큰을 찾을 수 없습니다."));
+
+        if(!storedRefreshToken.getRefreshToken().equals(refreshToken)){
+            throw new UnauthorizedException("유효하지 않은 리프레시 토큰입니다.");
+        }
+
+        return jwtTokenProvider.generateToken(email,member.getRole());
+
+    }
+
 }

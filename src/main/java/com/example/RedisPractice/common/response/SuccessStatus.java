@@ -16,6 +16,7 @@ public enum SuccessStatus {
     SIGNUP_SUCCESS(HttpStatus.OK,"회원가입 성공"),
     LOGIN_SUCCESS(HttpStatus.OK,"로그인 성공"),
     LOGOUT_SUCCESS(HttpStatus.OK,"로그아웃 성공"),
+    GENERATE_REFRESH_TOKEN_SUCCESS(HttpStatus.OK,"리프레시 토큰 발급 성공"),
 
     /**
      * 201 CREATED
