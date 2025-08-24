@@ -13,11 +13,9 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
 
-import static org.springframework.security.config.Elements.JWT;
 
 @Component
 @RequiredArgsConstructor
@@ -95,7 +93,7 @@ public class JwtTokenProvider {
         Date expiry = new Date(now.getTime() + refreshExpiration);
 
         return Jwts.builder()
-                .setSubject(email) // 토큰 대상자 정보
+                .setSubject(email) // 토큰 대상자 이메일 정보
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 // 서명 키는 기존 액세스 토큰 서명키와 동일하게 사용

@@ -80,13 +80,16 @@ public class MemberService {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(()->new UnauthorizedException("회원 정보를 찾을 수 없습니다."));
 
+        //Redis에서 회원 ID로 저장된 리프레시 토큰 조회
         RefreshToken storedRefreshToken = tokenRepository.findById(member.getId())
                 .orElseThrow(()-> new UnauthorizedException("리프레시 토큰을 찾을 수 없습니다."));
 
+        // 전달받은 리프레시 토큰과 Redis에서 조회한 토큰 일치 여부 확인
         if(!storedRefreshToken.getRefreshToken().equals(refreshToken)){
             throw new UnauthorizedException("유효하지 않은 리프레시 토큰입니다.");
         }
 
+        // 새로운 액세스 토큰 생성하여 반환
         return jwtTokenProvider.generateToken(email,member.getRole());
 
     }

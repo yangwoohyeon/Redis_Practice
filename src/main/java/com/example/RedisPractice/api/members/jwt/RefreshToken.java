@@ -7,14 +7,17 @@ import lombok.ToString;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 
-@RedisHash(value = "token", timeToLive = 10)
+@RedisHash(value = "token")
 @AllArgsConstructor
 @Getter
 @ToString
 public class RefreshToken {
+
     @Id
-    private Long id;
+    private Long id; //Member ID와 매핑
+
     private String refreshToken;
+
     @TimeToLive
     private Long expiration;
 }
