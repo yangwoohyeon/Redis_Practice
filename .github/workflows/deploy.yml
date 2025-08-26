@@ -30,10 +30,13 @@ jobs:
       # 👉 application.yml 생성 (Secret 값 삽입)
       - name: Create application.yml
         run: |
-          touch ./src/main/resources/application.yml
-          echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.yml
+          mkdir -p ./src/main/resources   # 👉 최소 두 칸 들여쓰기
+          cat > ./src/main/resources/application.yml <<'EOF'
+          ${{ secrets.APPLICATION }}
+          EOF
           echo "===== application.yml 내용 ====="
           cat ./src/main/resources/application.yml
+      
 
       - name: Build
         run: ./gradlew clean build -x test
