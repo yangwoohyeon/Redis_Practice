@@ -9,7 +9,6 @@ env:
   IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/deploy_practice  # 본인 Docker Hub 리포명
   CONTAINER_NAME: spring-app
   PORT: "8080"
-  APP_DIR: "/home/ubuntu/app"
 
 jobs:
   build_and_push:
@@ -27,6 +26,14 @@ jobs:
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
+
+      # 👉 application.yml 생성 (Secret 값 삽입)
+      - name: Create application.yml
+        run: |
+          touch ./src/main/resources/application.yml
+          echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.yml
+          echo "===== application.yml 내용 ====="
+          cat ./src/main/resources/application.yml
 
       - name: Build
         run: ./gradlew clean build -x test
@@ -65,32 +72,23 @@ jobs:
             TAG="${{ github.sha }}"
             NAME="${{ env.CONTAINER_NAME }}"
             PORT="${{ env.PORT }}"
-            APP_DIR="${{ env.APP_DIR }}"
 
-            # 1) Docker Hub 로그인 (private 리포일 때 필요)
+            # 1) Docker Hub 로그인
             docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
 
-            # 2) application.yml 복원 (원문 그대로)
-            mkdir -p "$APP_DIR/config"
-            cat > "$APP_DIR/config/application.yml" << 'EOF'
-            ${{ secrets.APPLICATION }}
-            EOF
-            chmod 600 "$APP_DIR/config/application.yml"
-            
-            # 3) 새 이미지 pull
+            # 2) 새 이미지 pull
             docker pull "$IMAGE:$TAG"
             
-            # 4) 기존 컨테이너 정리
+            # 3) 기존 컨테이너 정리
             docker stop "$NAME" 2>/dev/null || true
             docker rm "$NAME" 2>/dev/null || true
             
-            # 5) /config 마운트로 기동
+            # 4) 컨테이너 실행 (config 마운트 불필요)
             docker run -d \
               --name "$NAME" \
               --restart unless-stopped \
               -p "${PORT}:8080" \
-              -v "$APP_DIR/config:/config" \
               "$IMAGE:$TAG"
             
-            # 6) 안 쓰는 이미지 정리
+            # 5) 안 쓰는 이미지 정리
             docker image prune -f
