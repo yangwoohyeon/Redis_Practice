@@ -30,9 +30,9 @@ jobs:
       # 👉 application.yml 생성 (Secret 값 삽입)
       - name: Create application.yml
         run: |
-          mkdir -p ./src/main/resources   # 👉 최소 두 칸 들여쓰기
+          mkdir -p ./src/main/resources  
           cat > ./src/main/resources/application.yml <<'EOF'
-          ${{ secrets.APPLICATION }}
+          ${{ secrets.APPLICATION_YML }}
           EOF
           echo "===== application.yml 내용 ====="
           cat ./src/main/resources/application.yml
