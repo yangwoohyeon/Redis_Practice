@@ -25,7 +25,7 @@ public class CorsConfig {
                 "DELETE",
                 "OPTIONS"
         ));
-        config.setAllowedHeaders(List.of("*")); // 모든 요청 헤더 허용
+        config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
