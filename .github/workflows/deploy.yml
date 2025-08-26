@@ -70,9 +70,11 @@ jobs:
             # 1) Docker Hub 로그인 (private 리포일 때 필요)
             docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
 
-            # 2) application.yml 복원 (base64 decode)
+            # 2) application.yml 복원 (원문 그대로)
             mkdir -p "$APP_DIR/config"
-            echo "${{ secrets.APPLICATION_YML_B64 }}" | base64 -d > "$APP_DIR/config/application.yml"
+            cat > "$APP_DIR/config/application.yml" << 'EOF'
+            ${{ secrets.APPLICATION }}
+            EOF
             chmod 600 "$APP_DIR/config/application.yml"
             
             # 3) 새 이미지 pull
