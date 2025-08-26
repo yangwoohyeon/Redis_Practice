@@ -1,4 +1,4 @@
-package com.example.RedisPractice.api.members.repository;
+package com.example.RedisPractice.api.members.repository.jpa;
 
 import com.example.RedisPractice.api.members.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;

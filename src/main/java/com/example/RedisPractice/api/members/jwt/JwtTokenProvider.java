@@ -1,7 +1,7 @@
 package com.example.RedisPractice.api.members.jwt;
 
 import com.example.RedisPractice.api.members.entity.Role;
-import com.example.RedisPractice.api.members.repository.TokenRepository;
+import com.example.RedisPractice.api.members.repository.redis.TokenRepository;
 import com.example.RedisPractice.common.exception.UnauthorizedException;
 import com.example.RedisPractice.common.response.ErrorStatus;
 import io.jsonwebtoken.*;

@@ -1,4 +1,4 @@
-package com.example.RedisPractice.api.members.repository;
+package com.example.RedisPractice.api.members.repository.redis;
 
 import com.example.RedisPractice.api.members.jwt.RefreshToken;
 import org.springframework.data.repository.CrudRepository;
