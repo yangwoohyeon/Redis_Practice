@@ -26,7 +26,7 @@ public class CorsConfig {
                 "OPTIONS"
         ));
         config.setAllowedHeaders(List.of("*")); // 모든 요청 헤더 허용
-        config.setAllowCredentials(true);           // 쿠키, 인증정보 포함 여부 허용
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
