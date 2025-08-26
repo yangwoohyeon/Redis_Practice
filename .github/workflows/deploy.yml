@@ -6,9 +6,10 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/<리포지토리-이름>
+  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/deploy_practice  # 본인 Docker Hub 리포명
   CONTAINER_NAME: spring-app
   PORT: "8080"
+  APP_DIR: "/home/ubuntu/app"
 
 jobs:
   build_and_push:
@@ -38,12 +39,12 @@ jobs:
 
       - name: Build Docker image (tag with sha & latest)
         run: |
-          docker build -t $IMAGE_NAME:${{ github.sha }} -t $IMAGE_NAME:latest .
+          docker build -t "$IMAGE_NAME:${{ github.sha }}" -t "$IMAGE_NAME:latest" .
 
       - name: Push Docker image
         run: |
-          docker push $IMAGE_NAME:${{ github.sha }}
-          docker push $IMAGE_NAME:latest
+          docker push "$IMAGE_NAME:${{ github.sha }}"
+          docker push "$IMAGE_NAME:latest"
 
   deploy:
     runs-on: ubuntu-latest
@@ -58,20 +59,33 @@ jobs:
           port: 22
           script_stop: true
           script: |
+            set -euo pipefail
+
             IMAGE="${{ env.IMAGE_NAME }}"
             TAG="${{ github.sha }}"
             NAME="${{ env.CONTAINER_NAME }}"
             PORT="${{ env.PORT }}"
+            APP_DIR="${{ env.APP_DIR }}"
 
+            # 1) application.yml 복원
+            mkdir -p "$APP_DIR/config"
+            cat > "$APP_DIR/config/application.yml" << 'YAML'${{ secrets.APPLICATION_YML }}YAML
+            chmod 600 "$APP_DIR/config/application.yml"
+            
+            # 2) 새 이미지 pull
             docker pull "$IMAGE:$TAG"
-
+            
+            # 3) 기존 컨테이너 정리
             docker stop "$NAME" 2>/dev/null || true
             docker rm "$NAME" 2>/dev/null || true
-
-            docker image prune -f
-
+            
+            # 4) /config 마운트로 기동
             docker run -d \
               --name "$NAME" \
               --restart unless-stopped \
-              -p 8080:8080 \
+              -p "${PORT}:8080" \
+              -v "$APP_DIR/config:/config" \
               "$IMAGE:$TAG"
+          
+            # 5) 안 쓰는 이미지 정리
+            docker image prune -f
