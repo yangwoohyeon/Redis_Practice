@@ -69,7 +69,9 @@ jobs:
 
             # 1) application.yml 복원
             mkdir -p "$APP_DIR/config"
-            cat > "$APP_DIR/config/application.yml" << 'YAML'${{ secrets.APPLICATION_YML }}YAML
+            cat > "$APP_DIR/config/application.yml" << 'YAML'
+            ${{ secrets.APPLICATION_YML }}
+            YAML
             chmod 600 "$APP_DIR/config/application.yml"
             
             # 2) 새 이미지 pull
