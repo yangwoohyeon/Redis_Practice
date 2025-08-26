@@ -67,27 +67,28 @@ jobs:
             PORT="${{ env.PORT }}"
             APP_DIR="${{ env.APP_DIR }}"
 
-            # 1) application.yml 복원
+            # 1) Docker Hub 로그인 (private 리포일 때 필요)
+            docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
+
+            # 2) application.yml 복원 (base64 decode)
             mkdir -p "$APP_DIR/config"
-            cat > "$APP_DIR/config/application.yml" << 'YAML'
-            ${{ secrets.APPLICATION_YML }}
-            YAML
+            echo "${{ secrets.APPLICATION_YML_B64 }}" | base64 -d > "$APP_DIR/config/application.yml"
             chmod 600 "$APP_DIR/config/application.yml"
             
-            # 2) 새 이미지 pull
+            # 3) 새 이미지 pull
             docker pull "$IMAGE:$TAG"
             
-            # 3) 기존 컨테이너 정리
+            # 4) 기존 컨테이너 정리
             docker stop "$NAME" 2>/dev/null || true
             docker rm "$NAME" 2>/dev/null || true
             
-            # 4) /config 마운트로 기동
+            # 5) /config 마운트로 기동
             docker run -d \
               --name "$NAME" \
               --restart unless-stopped \
               -p "${PORT}:8080" \
               -v "$APP_DIR/config:/config" \
               "$IMAGE:$TAG"
-          
-            # 5) 안 쓰는 이미지 정리
+            
+            # 6) 안 쓰는 이미지 정리
             docker image prune -f
