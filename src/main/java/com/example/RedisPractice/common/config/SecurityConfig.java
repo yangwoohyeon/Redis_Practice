@@ -42,7 +42,8 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/",                                    // 인덱스
+                                "/",
+                                "/api",                                     // 헬스체크
                                 "/api/member/**",                          // 로그인, 회원가입
                                 "/css/**", "/js/**", "/images/**",  // 정적 리소스
                                 "/favicon.ico",                         // 파비콘
