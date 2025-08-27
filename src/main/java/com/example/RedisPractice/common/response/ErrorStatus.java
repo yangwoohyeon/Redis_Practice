@@ -13,7 +13,8 @@ public enum ErrorStatus {
      */
     BAD_REQUEST_DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST,"이미 가입된 사용자의 이메일 입니다."),
     BAD_REQUEST_DUPLICATE_NICKNAME(HttpStatus.BAD_REQUEST,"사용중인 닉네임 입니다."),
-
+    BAD_REQUEST_MISSING_PARAM(HttpStatus.BAD_REQUEST, "요청 값이 입력되지 않았습니다."),
+    BAD_REQUEST_MISSING_REQUIRED_FIELD(HttpStatus.BAD_REQUEST, "필수 입력값이 누락되었습니다."),
 
     /**
      * 401 UNAUTHORIZED (인증되지 않은 사용자의 요청)
@@ -32,7 +33,7 @@ public enum ErrorStatus {
     /**
      * 404 NOT_FOUND (잘못된 URL, 요청 자원이 서버에 존재 X)
      */
-
+    NOT_FOUND_RESOURCE(HttpStatus.NOT_FOUND, "요청한 리소스를 찾을 수 없습니다."),
     /**
      * 500 SERVER_ERROR (서버 내부 오류)
      */
