@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/",
-                                "/api",                                     // 헬스체크
+                                "/api/health",                                     // 헬스체크
                                 "/api/member/**",                          // 로그인, 회원가입
                                 "/css/**", "/js/**", "/images/**",  // 정적 리소스
                                 "/favicon.ico",                         // 파비콘
